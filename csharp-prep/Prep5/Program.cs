@@ -5,7 +5,7 @@ class Program
     static void Main(string[] args)
     {
         DisplayWelcome();
-        PromptUserName();
+        string name = PromptUserName();
 
         int number = PromptUserNumber();
         int squaredNumber = SquareNumber(number);
@@ -18,21 +18,23 @@ class Program
         Console.WriteLine("Welcome to the Program!\n");
     }
 
-    static void PromptUserName()
+    static string PromptUserName()
     {
         Console.WriteLine("Please enter your name.\n");
 
-        string nombre Console.ReadLine();
+        string name2 = Console.ReadLine();
 
-        Console.WriteLine($"\nHello {nombre}, nice to meet you !!!\n");
+        Console.WriteLine($"\nHello {name2}, nice to meet you !!!\n");
+        return name2;
     }
 
     static int PromptUserNumber()
     {
         Console.WriteLine("Please enter your favorite number: \n");
-        string number = Console.ReadLine();
-        int number_int = Console.ReadLine();
-        Console.WriteLine($"\nYour favorite number is: {number_int}\n");
+        string numberString = Console.ReadLine();
+        int number = Convert.ToInt32(numberString);
+        Console.WriteLine($"\nYour favorite number is: {number}\n");
+        return number;
     }
 
     static int SquareNumber(int number)
