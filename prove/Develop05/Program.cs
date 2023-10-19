@@ -1,164 +1,164 @@
 using System;
 using System.Collections.Generic;
 
-public class Objetivo
+public class Goal
 {
-    public string nombre;
-    public int valor;
+    public string name;
+    public int value;
 
-    public Objetivo(string nombre, int valor)
+    public Goal(string name, int value)
     {
-        this.nombre = nombre;
-        this.valor = valor;
+        this.name = name;
+        this.value = value;
     }
 
-    public virtual void Completar()
+    public virtual void Complete()
     {
-        Console.WriteLine($"Has completado el objetivo: {nombre}. Ganaste {valor} puntos.");
+        Console.WriteLine($"You have completed the goal: {name}. You earned {value} points.");
     }
 
-    public string Nombre
+    public string Name
     {
-        get { return nombre; }
+        get { return name; }
     }
 
-    public int Valor
+    public int Value
     {
-        get { return valor; }
+        get { return value; }
     }
 }
 
-public class ObjetivoSimple : Objetivo
+public class SimpleGoal : Goal
 {
-    public ObjetivoSimple(string nombre, int valor) : base(nombre, valor)
+    public SimpleGoal(string name, int value) : base(name, value)
     {
     }
 
-    public override void Completar()
+    public override void Complete()
     {
-        base.Completar();
+        base.Complete();
     }
 }
 
-public class ObjetivoEterno : Objetivo
+public class EternalGoal : Goal
 {
-    public ObjetivoEterno(string nombre, int valor) : base(nombre, valor)
+    public EternalGoal(string name, int value) : base(name, value)
     {
     }
 
-    public override void Completar()
+    public override void Complete()
     {
-        base.Completar();
+        base.Complete();
     }
 }
 
-public class ObjetivoListaVerificacion : Objetivo
+public class ChecklistGoal : Goal
 {
-    private int cantidadDeseada;
-    private int completados;
+    private int desiredCount;
+    private int completed;
 
-    public ObjetivoListaVerificacion(string nombre, int valor, int cantidadDeseada) : base(nombre, valor)
+    public ChecklistGoal(string name, int value, int desiredCount) : base(name, value)
     {
-        this.cantidadDeseada = cantidadDeseada;
+        this.desiredCount = desiredCount;
     }
 
-    public override void Completar()
+    public override void Complete()
     {
-        completados++;
+        completed++;
 
-        if (completados >= cantidadDeseada)
+        if (completed >= desiredCount)
         {
-            Console.WriteLine($"¡Has completado el objetivo de lista de verificación {nombre}! Ganaste un bono de {valor} puntos.");
+            Console.WriteLine($"You have completed the checklist goal {name}! You earned a bonus of {value} points.");
         }
         else
         {
-            base.Completar();
+            base.Complete();
         }
     }
 
-    public string Estado
+    public string Status
     {
-        get { return $"Completado {completados}/{cantidadDeseada} veces"; }
+        get { return $"Completed {completed}/{desiredCount} times"; }
     }
 }
 
-public class ObjetivoProgresivo : Objetivo
+public class ProgressiveGoal : Goal
 {
-    private int progresoActual;
-    private int progresoObjetivo;
+    private int currentProgress;
+    private int targetProgress;
 
-    public ObjetivoProgresivo(string nombre, int valor, int progresoObjetivo) : base(nombre, valor)
+    public ProgressiveGoal(string name, int value, int targetProgress) : base(name, value)
     {
-        this.progresoActual = 0;
-        this.progresoObjetivo = progresoObjetivo;
+        this.currentProgress = 0;
+        this.targetProgress = targetProgress;
     }
 
-    public void HacerProgreso(int cantidad)
+    public void MakeProgress(int amount)
     {
-        progresoActual += cantidad;
+        currentProgress += amount;
 
-        if (progresoActual >= progresoObjetivo)
+        if (currentProgress >= targetProgress)
         {
-            Completar();
-            progresoActual = 0; // Reinicia el progreso
+            Complete();
+            currentProgress = 0; // Reset progress
         }
     }
 
-    public override void Completar()
+    public override void Complete()
     {
-        Console.WriteLine($"Has hecho suficiente progreso en el objetivo: {nombre}. Ganaste {valor} puntos.");
+        Console.WriteLine($"You have made enough progress on the goal: {name}. You earned {value} points.");
     }
 
-    public string EstadoProgreso
+    public string ProgressStatus
     {
-        get { return $"Progreso actual: {progresoActual}/{progresoObjetivo}"; }
+        get { return $"Current progress: {currentProgress}/{targetProgress}"; }
     }
 }
 
-public class Usuario
+public class User
 {
-    private int puntuacion;
-    private List<Objetivo> objetivos = new List<Objetivo>();
+    private int score;
+    private List<Goal> goals = new List<Goal>();
 
-    public int Puntuacion
+    public int Score
     {
-        get { return puntuacion; }
+        get { return score; }
     }
 
-    public void AgregarObjetivo(Objetivo objetivo)
+    public void AddGoal(Goal goal)
     {
-        objetivos.Add(objetivo);
+        goals.Add(goal);
     }
 
-    public void RegistrarEvento(Objetivo objetivo)
+    public void RegisterEvent(Goal goal)
     {
-        objetivo.Completar();
-        puntuacion += objetivo.Valor;
+        goal.Complete();
+        score += goal.Value;
     }
 
-    public void HacerProgresoEnObjetivoProgresivo(ObjetivoProgresivo objetivo, int cantidad)
+    public void MakeProgressInProgressiveGoal(ProgressiveGoal goal, int amount)
     {
-        objetivo.HacerProgreso(cantidad);
-        puntuacion += objetivo.Valor;
+        goal.MakeProgress(amount);
+        score += goal.Value;
     }
 
-    public void MostrarObjetivos()
+    public void ShowGoals()
     {
-        foreach (var objetivo in objetivos)
+        foreach (var goal in goals)
         {
-            if (objetivo is ObjetivoListaVerificacion)
+            if (goal is ChecklistGoal)
             {
-                var objetivoLista = (ObjetivoListaVerificacion)objetivo;
-                Console.WriteLine($"{objetivo.Nombre}: {objetivoLista.Estado}");
+                var checklistGoal = (ChecklistGoal)goal;
+                Console.WriteLine($"{goal.Name}: {checklistGoal.Status}");
             }
-            else if (objetivo is ObjetivoProgresivo)
+            else if (goal is ProgressiveGoal)
             {
-                var objetivoProgresivo = (ObjetivoProgresivo)objetivo;
-                Console.WriteLine($"{objetivo.Nombre}: {objetivoProgresivo.EstadoProgreso}");
+                var progressiveGoal = (ProgressiveGoal)goal;
+                Console.WriteLine($"{goal.Name}: {progressiveGoal.ProgressStatus}");
             }
             else
             {
-                Console.WriteLine($"{objetivo.Nombre}");
+                Console.WriteLine($"{goal.Name}");
             }
         }
     }
@@ -168,36 +168,63 @@ class Program
 {
     static void Main()
     {
-        ObjetivoSimple maraton = new ObjetivoSimple("Correr una maratón", 1000);
-        ObjetivoEterno lecturaEscrituras = new ObjetivoEterno("Leer las Escrituras", 100);
-        ObjetivoListaVerificacion asistirTemplo = new ObjetivoListaVerificacion("Asistir al templo", 50, 10);
-        ObjetivoProgresivo trabajarProyecto = new ObjetivoProgresivo("Trabajar en el proyecto", 200, 5);
-        ObjetivoProgresivo comerSaludable = new ObjetivoProgresivo("Comer saludable", 150, 10);
+        SimpleGoal marathon = new SimpleGoal("Run a marathon", 1000);
+        EternalGoal readScriptures = new EternalGoal("Read scriptures", 100);
+        ChecklistGoal attendTemple = new ChecklistGoal("Attend the temple", 50, 10);
+        ProgressiveGoal workOnProject = new ProgressiveGoal("Work on the project", 200, 5);
+        ProgressiveGoal eatHealthy = new ProgressiveGoal("Eat healthy", 150, 10);
 
-        Usuario usuario = new Usuario();
-        usuario.AgregarObjetivo(maraton);
-        usuario.AgregarObjetivo(lecturaEscrituras);
-        usuario.AgregarObjetivo(asistirTemplo);
-        usuario.AgregarObjetivo(trabajarProyecto);
-        usuario.AgregarObjetivo(comerSaludable);
+        User user = new User();
+        user.AddGoal(marathon);
+        user.AddGoal(readScriptures);
+        user.AddGoal(attendTemple);
+        user.AddGoal(workOnProject);
+        user.AddGoal(eatHealthy);
 
-        usuario.RegistrarEvento(maraton);
-        usuario.RegistrarEvento(lecturaEscrituras);
-        usuario.RegistrarEvento(asistirTemplo);
-        usuario.RegistrarEvento(asistirTemplo);
-        usuario.RegistrarEvento(asistirTemplo);
-        usuario.RegistrarEvento(asistirTemplo);
-        usuario.RegistrarEvento(asistirTemplo);
-        usuario.RegistrarEvento(asistirTemplo);
-        usuario.RegistrarEvento(asistirTemplo);
-        usuario.RegistrarEvento(asistirTemplo);
-        usuario.RegistrarEvento(asistirTemplo);
-        usuario.RegistrarEvento(asistirTemplo);
+        user.RegisterEvent(marathon);
+        user.RegisterEvent(readScriptures);
+        user.RegisterEvent(attendTemple);
+        user.RegisterEvent(attendTemple);
+        user.RegisterEvent(attendTemple);
+        user.RegisterEvent(attendTemple);
+        user.RegisterEvent(attendTemple);
+        user.RegisterEvent(attendTemple);
+        user.RegisterEvent(attendTemple);
+        user.RegisterEvent(attendTemple);
+        user.RegisterEvent(attendTemple);
+        user.RegisterEvent(attendTemple);
 
-        usuario.HacerProgresoEnObjetivoProgresivo(trabajarProyecto, 2);
-        usuario.HacerProgresoEnObjetivoProgresivo(comerSaludable, 3);
+        user.MakeProgressInProgressiveGoal(workOnProject, 2);
+        user.MakeProgressInProgressiveGoal(eatHealthy, 3);
 
-        usuario.MostrarObjetivos();
-        Console.WriteLine($"Puntuación total: {usuario.Puntuacion}");
+        user.ShowGoals();
+        Console.WriteLine($"Total score: {user.Score}");
     }
 }
+
+
+
+// I made a program called "Eternal Quest" that helps you track different types of goals. It's like a game where you earn points for completing goals.
+
+// Here's what it does:
+
+// Simple Goals: You can set simple goals like "Run a marathon" and when you complete them, you get points. For example, running a marathon gives you 1000 points.
+
+// Eternal Goals: These are goals that you can do over and over again, like "Read scriptures". Every time you do it, you get points. You'll get 100 points each time.
+
+// Checklist Goals: These are goals where you have to do something a certain number of times to complete it. For example, if you set a goal to "Attend the temple" 10 times, you'll get 50 points each time you go. When you reach 10 times, you'll get a bonus of 500 points.
+
+// Progressive Goals: You can also set goals where you need to make progress towards something big, like working on a project. When you make enough progress, you get points.
+
+// Negative Goals (optional): If you want, you can set goals where you lose points for bad habits.
+
+// See Your Score: You can check how many points you have.
+
+// Add Your Own Goals: You can create new goals of any type.
+
+// Track Your Achievements: You can mark when you've completed a goal and get points for it.
+
+// See Your Goal List: You can see a list of all your goals and know if they're completed or not.
+
+// Save and Load: You can save your goals and scores, and load them later.
+
